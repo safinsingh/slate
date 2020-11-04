@@ -5,9 +5,9 @@
 #include "util.h"
 
 char* read_config() {
-    FILE* f = fopen("build.sl", "r");
+    FILE* f = fopen("build.sc", "r");
     if (f == NULL) {
-        error("Failed to open file: `build.sl`");
+        error("Failed to open file: `build.sc`");
     }
 
     fseek(f, 0, SEEK_END);
