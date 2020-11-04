@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "util.c"
+#include "../lang/lex.h"
+#include "util.h"
 
 char* read_config() {
     FILE* f = fopen("build.sl", "r");
@@ -28,7 +29,12 @@ char* read_config() {
 }
 
 int main() {
-    char* file = read_config();
-    printf("%s", file);
+    char* content = read_config();
+    enum Token* parsed = parse_config(content);
+
+    for (int i = 0; i < 10000000; i++) {
+        printf("%d", parsed[i]);
+    }
+
     return 0;
 }

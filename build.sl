@@ -1,13 +1,23 @@
-# !dep()
+# an example slate
+# build configuration
 
-$style = gcc
+# !dep([xlib])
 
-!type($style)
+$runner = gcc
+
+!run($runner)
 !src([
-    src/main.c
+    src/main.c,
+    src/util.c,
+    src/util.h,
+    lang/lex.c,
+    lang/lex.h
 ])
 
-main(
+main([
     !build,
     src
-)
+])
+
+# !include(cli)
+# !include(lang)
