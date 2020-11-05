@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "../lang/lex.h"
-#include "util.h"
+#include "../util/util.h"
 
 char* read_config() {
     FILE* f = fopen("build.rock", "r");

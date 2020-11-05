@@ -2,7 +2,8 @@
 #define LANG_LEX_H
 
 #define GEN_TOK(T) lexer_gen_token(l.line, l.column, T)
-#define PRINT_TOK(T) printf("%d,%d: %s\n", tok->line, tok->col, T)
+#define GEN_TOK_P(T) lexer_gen_token(l->line, l->column, T)
+#define PRINT_TOK(T) printf("%d,%d:\t%s\n", tok->line, tok->col, T)
 
 struct Lexer {
     char* input;

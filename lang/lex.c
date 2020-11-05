@@ -28,17 +28,21 @@ void lexer_append_token(struct Lexer* l, struct Token t) {
     l->t_len++;
 }
 
-void lexer_eat_token(struct Lexer* l, struct Token t) {
-    lexer_append_token(l, t);
+void lexer_translate(struct Lexer* l) {
     l->cursor += 1;
     l->column += 1;
 }
 
-char lexer_get_char(struct Lexer l, int pos) {
-    if (pos <= strlen(l.input)) {
-        return l.input[pos];
+char lexer_get_char(struct Lexer* l, int pos) {
+    if (pos <= strlen(l->input)) {
+        return l->input[pos];
     }
     return '\0';
+}
+
+void lexer_eat_token(struct Lexer* l, struct Token t) {
+    lexer_append_token(l, t);
+    lexer_translate(l);
 }
 
 struct Token lexer_gen_token(int ln, int cl, enum TokType kd) {
@@ -49,22 +53,44 @@ struct Token lexer_gen_token(int ln, int cl, enum TokType kd) {
     return t;
 }
 
+void lexer_eat_newline(struct Lexer* l) {
+    lexer_eat_token(l, GEN_TOK_P(Newline));
+    l->line += 1;
+    l->column = 0;
+}
+
+void lexer_eat_comment(struct Lexer* l) {
+    lexer_append_token(l, GEN_TOK_P(Comment));
+    char current_char = lexer_get_char(l, l->cursor);
+
+    while (current_char != '\0') {
+        if (current_char == '\n') {
+            lexer_eat_newline(l);
+            break;
+        } else {
+            lexer_translate(l);
+        }
+        current_char = lexer_get_char(l, l->cursor);
+    }
+}
+
 struct Lexer parse_config(char* config_str) {
     struct Lexer l = lexer_new(config_str);
 
-    char current_char = lexer_get_char(l, l.cursor);
+    char current_char = lexer_get_char(&l, l.cursor);
     while (current_char != '\0') {
         switch (current_char) {
             case '\n':
-                lexer_eat_token(&l, GEN_TOK(Newline));
-                l.line += 1;
-                l.column = 0;
+                lexer_eat_newline(&l);
+                break;
+            case '#':
+                lexer_eat_comment(&l);
                 break;
             default:
                 lexer_eat_token(&l, GEN_TOK(Undefined));
                 break;
         }
-        current_char = lexer_get_char(l, l.cursor);
+        current_char = lexer_get_char(&l, l.cursor);
     }
 
     return l;
@@ -79,6 +105,9 @@ void lexer_print_tokens(struct Lexer l) {
                 break;
             case Undefined:
                 PRINT_TOK("UNDEFINED");
+                break;
+            case Comment:
+                PRINT_TOK("COMMENT");
                 break;
             default:
                 break;
