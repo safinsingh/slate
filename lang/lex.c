@@ -10,8 +10,8 @@ struct Lexer lexer_new(char* source) {
     strcpy(l.input, source);
     l.cursor = 0;
     l.column = 0;
-    l.line = 1;
-    l.t_len = 0;
+    l.line   = 1;
+    l.t_len  = 0;
     l.tokens = (struct Token*)calloc(100, sizeof(struct Token));
     return l;
 }
@@ -20,7 +20,7 @@ void lexer_append_token(struct Lexer* l, struct Token t) {
     int arr_sz = l->t_len;
 
     if (arr_sz != 0 && (arr_sz % 100) == 0) {
-        l->tokens = realloc(l->tokens, arr_sz + 100);
+        l->tokens         = realloc(l->tokens, arr_sz + 100);
         l->tokens[arr_sz] = t;
     } else {
         l->tokens[arr_sz] = t;
@@ -45,7 +45,7 @@ char lexer_get_char(struct Lexer l, int pos) {
 struct Token lexer_gen_token(int ln, int cl, enum TokType kd) {
     struct Token t;
     t.line = ln;
-    t.col = cl;
+    t.col  = cl;
     t.kind = kd;
     return t;
 }

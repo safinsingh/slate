@@ -14,9 +14,9 @@ $runner = gcc
     lang/lex.h
 ])
 
-main([
-    !build,
-    src
+!exec([
+    !cmd("echo test"),
+    !build(!src),
 ])
 
 # !include(cli)
