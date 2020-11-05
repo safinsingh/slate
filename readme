@@ -1,0 +1,6 @@
+slate
+=====
+
+slate is a minimal build system inspired by meson.
+it has its very own configuration syntax, and example
+of which is in `/build.sc`.
