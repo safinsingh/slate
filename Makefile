@@ -1,7 +1,13 @@
-DEFAULT_GOAL := dev
+DEFAULT_GOAL 	:= 	dev
+CC 				:= 	gcc
+SOURCES			:= 	src/main.c src/util/util.c src/lang/lex.c
+CFLAGS 			:= 	-std=c99 -Wall -Werror \
+					-Wextra -pedantic -pedantic-errors \
+					-Wshadow -Wformat=2 -Wformat-truncation \
+					-Wundef
 
 dev:
-	gcc -std=c99 -Wall -Werror -g app/main.c util/util.c lang/lex.c -o slate.exe
+	$(CC) $(CFLAGS) $(SOURCES) -g3 -o slate
 
-debug:
-	gdb slate.exe
+release:
+	$(CC) $(CFLAGS) $(SOURCES) -o slate

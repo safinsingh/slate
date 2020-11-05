@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../lang/lex.h"
-#include "../util/util.h"
+#include "../include/lang/lex.h"
+#include "../include/util/util.h"
 
 char* read_config() {
     FILE* f = fopen("build.rock", "r");
@@ -11,7 +11,7 @@ char* read_config() {
     }
 
     fseek(f, 0, SEEK_END);
-    int size = ftell(f);
+    size_t size = ftell(f);
     fseek(f, 0, SEEK_SET);
 
     char* buf = (char*)calloc(size, sizeof(char));

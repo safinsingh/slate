@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lex.h"
+#include "../../include/lang/lex.h"
 
 struct Lexer* lexer_new(char* source) {
     struct Lexer* l = (struct Lexer*)malloc(sizeof(struct Lexer));
@@ -35,7 +35,7 @@ void lexer_translate(struct Lexer* l) {
     l->column += 1;
 }
 
-char lexer_get_char(struct Lexer* l, int pos) {
+char lexer_get_char(struct Lexer* l, size_t pos) {
     if (pos <= strlen(l->input)) {
         return l->input[pos];
     }
