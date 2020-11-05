@@ -5,7 +5,7 @@
 #include "util.h"
 
 char* read_config() {
-    FILE* f = fopen("build.sc", "r");
+    FILE* f = fopen("build.rock", "r");
     if (f == NULL) {
         error("Failed to open file: `build.sc`");
     }
