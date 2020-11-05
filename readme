@@ -1,6 +1,6 @@
 slate
 =====
 
-slate is a minimal build system inspired by meson.
-it has its very own configuration syntax, and example
+slate is a minimal build system. it has its very own 
+configuration syntax (inspired by meson); an example
 of which is in `/build.sc`.
