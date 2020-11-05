@@ -30,11 +30,9 @@ char* read_config() {
 
 int main() {
     char* content = read_config();
-    enum Token* parsed = parse_config(content);
+    struct Lexer parsed = parse_config(content);
 
-    for (int i = 0; i < 10000000; i++) {
-        printf("%d", parsed[i]);
-    }
+    lexer_print_tokens(parsed);
 
     return 0;
 }
