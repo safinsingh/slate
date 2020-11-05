@@ -37,9 +37,8 @@ void lexer_eat_token(struct Lexer* l, struct Token t) {
 char lexer_get_char(struct Lexer l, int pos) {
     if (pos <= strlen(l.input)) {
         return l.input[pos];
-    } else {
-        return '\0';
     }
+    return '\0';
 }
 
 struct Token lexer_gen_token(int ln, int cl, enum TokType kd) {

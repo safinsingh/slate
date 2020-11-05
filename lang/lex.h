@@ -1,3 +1,6 @@
+#ifndef LANG_LEX_H
+#define LANG_LEX_H
+
 #define GEN_TOK(T) lexer_gen_token(l.line, l.column, T)
 #define PRINT_TOK(T) printf("%d,%d: %s\n", tok->line, tok->col, T)
 
@@ -41,3 +44,5 @@ struct Token {
 struct Lexer parse_config();
 
 void lexer_print_tokens(struct Lexer l);
+
+#endif  // LANG_LEX_H
