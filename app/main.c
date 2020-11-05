@@ -29,8 +29,8 @@ char* read_config() {
 }
 
 int main() {
-    char* content       = read_config();
-    struct Lexer parsed = parse_config(content);
+    char* content        = read_config();
+    struct Lexer* parsed = parse_config(content);
 
     lexer_print_tokens(parsed);
 

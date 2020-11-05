@@ -4,15 +4,17 @@
 
 #include "lex.h"
 
-struct Lexer lexer_new(char* source) {
-    struct Lexer l;
-    l.input = (char*)malloc(strlen(source));
-    strcpy(l.input, source);
-    l.cursor = 0;
-    l.column = 0;
-    l.line   = 1;
-    l.t_len  = 0;
-    l.tokens = (struct Token*)calloc(100, sizeof(struct Token));
+struct Lexer* lexer_new(char* source) {
+    struct Lexer* l = (struct Lexer*)malloc(sizeof(struct Lexer));
+
+    l->input  = (char*)malloc(strlen(source));
+    l->cursor = 0;
+    l->column = 0;
+    l->line   = 1;
+    l->t_len  = 0;
+    l->tokens = (struct Token*)calloc(100, sizeof(struct Token));
+
+    strcpy(l->input, source);
     return l;
 }
 
@@ -45,22 +47,22 @@ void lexer_eat_token(struct Lexer* l, struct Token t) {
     lexer_translate(l);
 }
 
-struct Token lexer_gen_token(int ln, int cl, enum TokType kd) {
+struct Token lexer_gen_token(struct Lexer* l, enum TokType kind) {
     struct Token t;
-    t.line = ln;
-    t.col  = cl;
-    t.kind = kd;
+    t.line = l->line;
+    t.col  = l->column;
+    t.kind = kind;
     return t;
 }
 
 void lexer_eat_newline(struct Lexer* l) {
-    lexer_eat_token(l, GEN_TOK_P(Newline));
+    lexer_eat_token(l, lexer_gen_token(l, Newline));
     l->line += 1;
     l->column = 0;
 }
 
 void lexer_eat_comment(struct Lexer* l) {
-    lexer_append_token(l, GEN_TOK_P(Comment));
+    lexer_append_token(l, lexer_gen_token(l, Comment));
     char current_char = lexer_get_char(l, l->cursor);
 
     while (current_char != '\0') {
@@ -74,31 +76,31 @@ void lexer_eat_comment(struct Lexer* l) {
     }
 }
 
-struct Lexer parse_config(char* config_str) {
-    struct Lexer l = lexer_new(config_str);
+struct Lexer* parse_config(char* config_str) {
+    struct Lexer* l = lexer_new(config_str);
 
-    char current_char = lexer_get_char(&l, l.cursor);
+    char current_char = lexer_get_char(l, l->cursor);
     while (current_char != '\0') {
         switch (current_char) {
             case '\n':
-                lexer_eat_newline(&l);
+                lexer_eat_newline(l);
                 break;
             case '#':
-                lexer_eat_comment(&l);
+                lexer_eat_comment(l);
                 break;
             default:
-                lexer_eat_token(&l, GEN_TOK(Undefined));
+                lexer_eat_token(l, lexer_gen_token(l, Undefined));
                 break;
         }
-        current_char = lexer_get_char(&l, l.cursor);
+        current_char = lexer_get_char(l, l->cursor);
     }
 
     return l;
 }
 
-void lexer_print_tokens(struct Lexer l) {
-    for (int i = 0; i < l.t_len; i++) {
-        struct Token* tok = &l.tokens[i];
+void lexer_print_tokens(struct Lexer* l) {
+    for (int i = 0; i < l->t_len; i++) {
+        struct Token* tok = &l->tokens[i];
         switch (tok->kind) {
             case Newline:
                 PRINT_TOK("NEWLINE");

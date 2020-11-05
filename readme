@@ -1,6 +1,6 @@
                      slate
                      ===== 
- slate is a minimal and versatile build system. 
+ slate is a minimal and versatile build system.
  it has its very own configuration syntax (ins-
- pired  by meson); an example of which can be f-
- ound in `/build.sc`.
+ pired  by meson's); an example of which can be
+ found in `/build.rock`.
