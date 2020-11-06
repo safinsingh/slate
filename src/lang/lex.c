@@ -62,8 +62,10 @@ void lexer_eat_newline(struct Lexer* l) {
 }
 
 void lexer_eat_comment(struct Lexer* l) {
+    char current_char;
+
     lexer_append_token(l, lexer_gen_token(l, Comment));
-    char current_char = lexer_get_char(l, l->cursor);
+    current_char = lexer_get_char(l, l->cursor);
 
     while (current_char != '\0') {
         if (current_char == '\n') {
@@ -88,6 +90,27 @@ struct Lexer* parse_config(char* config_str) {
             case '#':
                 lexer_eat_comment(l);
                 break;
+            case '$':
+                lexer_eat_token(l, lexer_gen_token(l, Dollar));
+                break;
+            case '[':
+                lexer_eat_token(l, lexer_gen_token(l, LBracket));
+                break;
+            case ']':
+                lexer_eat_token(l, lexer_gen_token(l, RBracket));
+                break;
+            case '(':
+                lexer_eat_token(l, lexer_gen_token(l, LParen));
+                break;
+            case ')':
+                lexer_eat_token(l, lexer_gen_token(l, RParen));
+                break;
+            case '{':
+                lexer_eat_token(l, lexer_gen_token(l, LBrace));
+                break;
+            case '}':
+                lexer_eat_token(l, lexer_gen_token(l, RBrace));
+                break;
             default:
                 lexer_eat_token(l, lexer_gen_token(l, Undefined));
                 break;
@@ -99,20 +122,18 @@ struct Lexer* parse_config(char* config_str) {
 }
 
 void lexer_print_tokens(struct Lexer* l) {
-    for (int i = 0; i < l->t_len; i++) {
+    int i;
+
+    /*
+    const char* tok_ref[14] = {
+        "ASSIGN",   "DOLLAR",  "LPAREN",    "RPAREN", "LBRACKET",
+        "RBRACKET", "LBRACE",  "RBRACE",    "COMMA",  "BANG",
+        "IDENT",    "NEWLINE", "UNDEFINED", "COMMA",
+    };
+    */
+
+    for (i = 0; i < l->t_len; i++) {
         struct Token* tok = &l->tokens[i];
-        switch (tok->kind) {
-            case Newline:
-                PRINT_TOK("NEWLINE");
-                break;
-            case Undefined:
-                PRINT_TOK("UNDEFINED");
-                break;
-            case Comment:
-                PRINT_TOK("COMMENT");
-                break;
-            default:
-                break;
-        }
+        printf("%d,%d:\t%d\n", tok->line, tok->col, (int)tok->kind);
     }
 }

@@ -3,4 +3,4 @@
 
 void error(const char* msg);
 
-#endif  // APP_UTIL_H
+#endif

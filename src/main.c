@@ -5,21 +5,25 @@
 #include "../include/util/util.h"
 
 char* read_config() {
+    size_t size;
+    size_t res;
+    char* buf;
+
     FILE* f = fopen("build.rock", "r");
     if (f == NULL) {
         error("Failed to open file: `build.sc`");
     }
 
     fseek(f, 0, SEEK_END);
-    size_t size = ftell(f);
+    size = ftell(f);
     fseek(f, 0, SEEK_SET);
 
-    char* buf = (char*)calloc(size, sizeof(char));
+    buf = (char*)calloc(size, sizeof(char));
     if (buf == NULL) {
         error("Failed to allocate config file buffer");
     }
 
-    size_t res = fread(buf, sizeof(char), size, f);
+    res = fread(buf, sizeof(char), size, f);
     if (res != size) {
         error("Failed to read config file buffer");
     }
