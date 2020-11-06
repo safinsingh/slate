@@ -1,26 +1,24 @@
-# an example slate
-# build configuration
-
-# !dep([xlib])
-
-$runner = gcc
-!env({
-    CFLAGS = -std=c99 -Wall -Werror
+!project({
+    name = slate,
+    license = MPL v2.0,
+    version = 0.1.0
 })
 
-!run($runner)
 !src([
-    src/main.c,
-    src/util.c,
-    src/util.h,
-    lang/lex.c,
-    lang/lex.h
+    src/app.c,
+    src/util/util.c,
+    src/lang/lex.c,
 ])
 
-!exec([
-    !cmd("echo test"),
-    !build(),
-])
+!env({
+    CFLAGS = -ansi -Wall -Werror \
+            -Wextra -pedantic -pedantic-errors \
+            -Wshadow -Wformat=2 -Wformat-truncation \
+            -Wundef --DSLATE_VERSION=@project::get(version),
+    CC = gcc,
+})
 
-# !include(cli)
-# !include(lang)
+!build([
+    !env::get(CC),
+    !env::get(CFLAGS)
+])

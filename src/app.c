@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../include/cli/cli.h"
 #include "../include/lang/lex.h"
 #include "../include/util/util.h"
 
@@ -32,10 +33,14 @@ char* read_config() {
     return buf;
 }
 
-int main() {
-    char* content        = read_config();
-    struct Lexer* parsed = parse_config(content);
+int main(int argc, char** argv) {
+    char* content;
+    struct Lexer* parsed;
 
+    parse_args(argc, argv);
+
+    content = read_config();
+    parsed  = parse_config(content);
     lexer_print_tokens(parsed);
 
     return 0;
