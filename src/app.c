@@ -5,14 +5,15 @@
 #include "../include/lang/lex.h"
 #include "../include/util/util.h"
 
-char* read_config() {
+char* read_config(char* config) {
     size_t size;
     size_t res;
     char* buf;
+    FILE* f;
 
-    FILE* f = fopen("build.rock", "r");
+    f = fopen(config, "r");
     if (f == NULL) {
-        error("Failed to open file: `build.sc`");
+        error("failed to open file: `%s`", config);
     }
 
     fseek(f, 0, SEEK_END);
@@ -21,12 +22,12 @@ char* read_config() {
 
     buf = (char*)calloc(size, sizeof(char));
     if (buf == NULL) {
-        error("Failed to allocate config file buffer");
+        error("failed to allocate config file buffer");
     }
 
     res = fread(buf, sizeof(char), size, f);
     if (res != size) {
-        error("Failed to read config file buffer");
+        error("failed to read config file buffer");
     }
 
     fclose(f);
@@ -36,10 +37,11 @@ char* read_config() {
 int main(int argc, char** argv) {
     char* content;
     struct Lexer* parsed;
+    struct Opts* opts;
 
-    parse_args(argc, argv);
+    opts = parse_args(argc, argv);
 
-    content = read_config();
+    content = read_config(opts->config);
     parsed  = parse_config(content);
     lexer_print_tokens(parsed);
 
